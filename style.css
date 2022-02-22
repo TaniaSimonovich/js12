@@ -15,3 +15,53 @@
     color: white;
     border: none;
 }
+
+.button{
+    width: 150px;
+    margin-left: 71px;
+    height: 28px;
+    margin-top: 1px;
+    background: #ffc107b8;
+    color: white;
+    border: none;
+}
+
+.flex{
+    display: flex;
+    margin-top: 26px;
+    margin-left: 72px;
+    border: 1px solid #fffb03;
+    width: 345px;
+    padding-left: 29px;
+    padding-bottom: 24px;
+}
+
+.name{
+    font-weight: bolder;
+    font-size: 24px;
+    color: #e1a800;
+    margin-bottom: 6px;
+}
+
+.phone{
+    margin-top: 0px;
+    margin-bottom: 3px;
+}
+
+.email{
+    margin-top: 1px;
+    margin-bottom: 2px;
+}
+
+.addres{
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
+.margin{
+    margin-left: 30px;
+}
+
+.id{
+    margin-top: 57px;
+}

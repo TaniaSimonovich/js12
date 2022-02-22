@@ -19,13 +19,7 @@ class User{
     }
 }
 let data = [];
-
-// let localStorageExpiration = localStorage.getItem('data');
-// if(localStorageExpiration.length > 0){
-//     data = JSON.parse(localStorageExpiration);
-// }
-
-// console.log(data);
+console.log(data);
 
 class Contacts {
     // #data = [];
@@ -38,6 +32,7 @@ class Contacts {
             address: address,
             phone:phone
         });
+        // let data = [];
         this.#id += 1;
         data.push(newContact)
     }
@@ -87,7 +82,38 @@ class ContactsApp extends Contacts{
     }   
     
 
+    static removeContact(element) {
+        console.log(element.parentElement)
+        element.parentElement.remove()
+    }
+
+    static additContact(element){
+        this.valueName = element.parentElement.firstElementChild.children[1].children[0].textContent;
+        this.valuePhone = element.parentElement.firstElementChild.children[1].children[1].textContent;
+        this.valueEmail = element.parentElement.firstElementChild.children[1].children[2].textContent;
+        this.valueAddres = element.parentElement.firstElementChild.children[1].children[3].textContent;
+
+
+
+        console.log(element.parentElement.firstElementChild.children[1].children[0].textContent)
+        this.operation = prompt ('Введите какой элемент хотите изменить (имя, номер, почта, aдрес):');
+        switch(this.operation){
+                        case 'имя':
+                            element.parentElement.firstElementChild.children[1].children[0].textContent = String(prompt('Введите новое имя').value);
+                            break;
+                        case 'номер':
+                            element.parentElement.firstElementChild.children[1].children[1].textContent = String(prompt('Введите новый номер').value);
+                            break;
+                        case 'почта':
+                            element.parentElement.firstElementChild.children[1].children[2].textContent = String(prompt('Введите новую почту').value);
+                            break;
+                        case 'aдрес':
+                            element.parentElement.firstElementChild.children[1].children[3].textContent = String(prompt('Введите новый адрес').value);
+                    }
+    }
+
     static setStorage(){
+        // let data = [];
         this.nameInput = document.querySelector('#name').value;
         this.emailInput = document.querySelector('#email').value;
         this.addresInput = document.querySelector('#addres').value;
@@ -96,35 +122,62 @@ class ContactsApp extends Contacts{
         if(this.nameInput === '' && this.emailInput === '' && this.addresInput === '' && this.phoneInput === ''){
             alert('Заполните все поля ввода!')
         } else{
+            // let data = [];
             newContacts.add(this.nameInput,this.emailInput, this.addresInput, this.phoneInput);
             console.log(newContacts.get());
             localStorage.setItem('storageExpiration', JSON.stringify(data));
             
-            // let localStorageExpiration = localStorage.getItem('data');
-            // if(localStorageExpiration.length > 0){
-            //     data = JSON.parse(localStorageExpiration);
-            // }
-            // let newData = new Data(Date.now() + 86400000);
-            // document.cookie = `storageExpiration = ${JSON.stringify(data)}; expires=`+ newData;
+            let localStorageExpiration = localStorage.getItem('data');
+            if(localStorageExpiration?.length > 0){
+                data = JSON.parse(localStorageExpiration);
+            }
+
+            let newData = new Date(Date.now() + 86400000);
+            document.cookie = `storageExpiration = ${JSON.stringify(data)}; expires=`+ newData;
 
             const divNewContact = document.createElement('div');
             document.body.appendChild(divNewContact);
             data.forEach(function(element,id) {
                 const newUser = document.createElement('div');
                 newUser.innerHTML = `
-                <p>${id + 1}</p>
-                <p>${element.data.name}</p>
-                <p>${element.data.email}</p>
-                <p>${element.data.address}</p>
-                <p>${element.data.phone}</p>`
+                <div>
+                <div class = "flex">
+                <p class = "id">${id + 1}</p>
+                <div class = "margin">
+                <p class = "name">${element.data.name}</p>
+                <p class = "phone">${element.data.phone}</p>
+                <p class = "email">Почта: ${element.data.email}</p>
+                <p class = "addres">Адрес: ${element.data.address}</p>
+                </div>
+                </div>
+                <button onclick = "ContactsApp.removeContact(this)" class = "button">Удалить</button>
+                <button onclick = "ContactsApp.additContact(this)" class = "button">Изменить</button>
+                </div>`
                 divNewContact.appendChild(newUser)
             })
         }
     }
+    static getData = async function(){
+        let url = 'https://jsonplaceholder.typicode.com/users'
+        await fetch(url).then (function(response){
+            console.log(response)
+            return response.json();
+            }).then(function(data){
+                console.log(data);
+                data.forEach(function(element,id){
+                    newContacts.add(element.name, element.email, element.address, element.phone)
+                    localStorage.setItem('user', JSON.stringify(data));
+                });
+        })
+    };
 
-    static getStorage(){
-        
+    static playSetData = function(){
+        if(localStorage?.length === 0){
+            ContactsApp.getData();
     }
+}();
 }
 
-let contactsApp = new ContactsApp()
+let contactsApp = new ContactsApp();
+console.log(data);
+
